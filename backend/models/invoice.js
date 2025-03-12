@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 const invoiceSchema = new mongoose.Schema({
+  uId : {
+    type : String,
+    required : true,
+  },
   patientName : {
     type: String,
     required : true,

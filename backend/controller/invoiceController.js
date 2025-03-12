@@ -19,6 +19,7 @@ const getAllInvoices = async (req,res) =>{
 const storeInvoices = async(req,res) =>{
   try {
     const record = await Invoice.create({
+        uId : req.body.uId,
         patientName: req.body.patientName,
         diagnosis: req.body.diagnosis,
         billAmount: req.body.billAmount,

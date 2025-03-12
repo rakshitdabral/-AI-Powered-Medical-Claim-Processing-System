@@ -1,3 +1,4 @@
+import { getAuth } from "firebase/auth";
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -8,6 +9,13 @@ const openai = new OpenAI({
 
 export async function analyzeImage(imageFile) {
     try {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        
+        if (!user) {
+            throw new Error('User not authenticated');
+        }
+
         const base64Image = await convertImageToBase64(imageFile);
 
         const response = await openai.chat.completions.create({
@@ -45,11 +53,28 @@ export async function analyzeImage(imageFile) {
         let extractedInfo;
         try {
             extractedInfo = JSON.parse(response.choices[0].message.content);
+
+            const storeResponse = await fetch('http://localhost:5000/api/v1/invoice/store', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ...extractedInfo,
+                    uId: user.uid
+                })
+            })
+
+            if (!storeResponse.ok) {
+                throw new Error('Failed to store data')
+            }
+            const result = await storeResponse.json()
+            return result.data
         } catch (error) {
             console.error("Failed to parse JSON response:", response.choices[0].message.content);
             throw new Error("Invalid JSON response from OpenAI", error);
         }
-        return extractedInfo;
+        
     } catch (error) {
         console.error("Error analyzing invoice:", error);
         throw error;
