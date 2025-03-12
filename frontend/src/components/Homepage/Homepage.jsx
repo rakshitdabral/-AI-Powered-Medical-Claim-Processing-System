@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { analyzeImage } from "@/services/Openai";
+
 
 function Homepage() {
   const [user, setUser] = useState(null);
@@ -31,10 +33,15 @@ function Homepage() {
 
   const navigate = useNavigate()
 
-  const handleFileUpload = (event) => {
+  const handleFileUpload =async (event) => {
     const file = event.target.files[0];
     if (file) {
-      console.log("File selected:", file);
+      try{
+        const analysis = await analyzeImage(file);
+        console.log("File Uploaded Successfully" , analysis)
+      }catch (error){
+        console.error("Error uploading file" , error)
+      }
     }
   };
 
