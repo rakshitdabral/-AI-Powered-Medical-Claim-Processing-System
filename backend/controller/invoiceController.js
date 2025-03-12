@@ -39,5 +39,24 @@ const storeInvoices = async(req,res) =>{
 }
 }
 
+const getRecentInvoices = async (req, res) => {
+    try {
+        
+        const records = await Invoice.find({ uId: req.params.uId })
+            .sort({ createdAt: -1 })
+            .limit(5);
+            
+        res.status(200).json({
+            success: true,
+            count: records.length,
+            data: records
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            error: error.message
+        });
+    }
+}
 
-module.exports  = {getAllInvoices , storeInvoices}
+module.exports  = {getAllInvoices , storeInvoices, getRecentInvoices}

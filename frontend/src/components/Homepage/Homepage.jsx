@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { auth, handleLogout } from "@/firebase/firebase";
+import { analyzeImage } from "@/services/Openai";
+import axios from "axios";
 import {
   AlertTriangle,
   BarChart2,
@@ -15,19 +17,20 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { analyzeImage } from "@/services/Openai";
 
 
 function Homepage() {
   const [user, setUser] = useState(null);
   const fileInputRef = useRef(null);
+  const [recentClaims, setRecentClaims] = useState([]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
+      if (currentUser) {
+        fetchRecentClaims(currentUser.uid);
+      }
     });
-
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 
@@ -42,6 +45,19 @@ function Homepage() {
       }catch (error){
         console.error("Error uploading file" , error)
       }
+    }
+  };
+
+  const fetchRecentClaims = async (userId) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/v1/invoice/recent/${userId}`);
+      console.log(response)
+      if (response.data.success) {
+        setRecentClaims(response.data.data);
+        
+      }
+    } catch (error) {
+      console.error("Error fetching recent claims:", error);
     }
   };
 
@@ -164,15 +180,34 @@ function Homepage() {
 
         {/* Bottom Grid */}
         <div className="grid grid-cols-3 gap-4 mt-6">
-          <Card className="col-span-2">
+          <Card className="col-span-2 overflow-x-hidden overflow-y-scroll">
             <CardHeader>
               <CardTitle>Recent Claims</CardTitle>
               <p className="text-sm text-muted-foreground">
                 Last 5 processed claims in the system
               </p>
             </CardHeader>
-            <CardContent>
-              {/* Add your claims list here */}
+            <CardContent className="">
+              <div className="space-y-4 ">
+                {recentClaims.map((claim) => (
+                  <div key={claim._id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div>
+                      <p className="font-medium">{claim.patientName}</p>
+                      <p className="text-sm text-muted-foreground">{claim.diagnosis}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(claim.serviceDate).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-medium">{claim.billAmount}</p>
+                      <p className="text-sm text-muted-foreground">Bill Amount</p>
+                    </div>
+                  </div>
+                ))}
+                {recentClaims.length === 0 && (
+                  <p className="text-center text-muted-foreground">No recent claims found</p>
+                )}
+              </div>
             </CardContent>
           </Card>
 
