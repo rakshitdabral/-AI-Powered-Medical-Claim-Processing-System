@@ -1,17 +1,17 @@
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { auth, handleLogout } from "@/firebase/firebase";
+import axios from "axios";
 import {
-  BarChart2,
-  FileText,
-  LayoutDashboard,
-  LogOut,
-  Settings,
+    BarChart2,
+    FileText,
+    LayoutDashboard,
+    LogOut,
+    Settings,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 function Claim() {
   const [user, setUser] = useState(null);
@@ -32,7 +32,7 @@ function Claim() {
 
   const fetchRecentClaims = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/v1/invoice/${userId}`);
+      const response = await axios.get(`https://ai-powered-medical-claim-processing.onrender.com/api/v1/invoice/${userId}`);
       console.log(response)
       if (response.data.success) {
         setRecentClaims(response.data.data);

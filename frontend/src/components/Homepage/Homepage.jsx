@@ -52,7 +52,7 @@ function Homepage() {
 
   const fetchRecentClaims = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/v1/invoice/recent/${userId}`);
+      const response = await axios.get(`https://ai-powered-medical-claim-processing.onrender.com/api/v1/invoice/recent/${userId}`);
       console.log(response)
       if (response.data.success) {
         setRecentClaims(response.data.data);
@@ -65,7 +65,7 @@ function Homepage() {
 
   const fetchTotalClaims = async (userId) =>{
     try {
-      const response = await axios.get(`http://localhost:5000/api/v1/invoice/count/${userId}`);
+      const response = await axios.get(`https://ai-powered-medical-claim-processing.onrender.com/api/v1/invoice/count/${userId}`);
       if (response.data.success) {
         setTotalClaims(response.data.totalClaims);
       }

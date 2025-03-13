@@ -55,7 +55,7 @@ export async function analyzeImage(imageFile) {
         try {
             extractedInfo = JSON.parse(response.choices[0].message.content);
 
-            const storeResponse = await fetch('http://localhost:5000/api/v1/invoice/store', {
+            const storeResponse = await fetch('https://ai-powered-medical-claim-processing.onrender.com/api/v1/invoice/store', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
