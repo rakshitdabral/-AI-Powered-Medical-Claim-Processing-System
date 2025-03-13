@@ -23,12 +23,14 @@ function Homepage() {
   const [user, setUser] = useState(null);
   const fileInputRef = useRef(null);
   const [recentClaims, setRecentClaims] = useState([]);
+  const [totalClaims, setTotalClaims] = useState(0);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
       if (currentUser) {
         fetchRecentClaims(currentUser.uid);
+        fetchTotalClaims(currentUser.uid)
       }
     });
     return () => unsubscribe();
@@ -60,6 +62,17 @@ function Homepage() {
       console.error("Error fetching recent claims:", error);
     }
   };
+
+  const fetchTotalClaims = async (userId) =>{
+    try {
+      const response = await axios.get(`http://localhost:5000/api/v1/invoice/count/${userId}`);
+      if (response.data.success) {
+        setTotalClaims(response.data.totalClaims);
+      }
+    } catch (error) {
+      console.error("Error fetching total claims:", error);
+    }
+  }
 
   return (
     <div className="min-h-screen flex">
@@ -131,10 +144,8 @@ function Homepage() {
               <FileText className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">1,284</div>
-              <p className="text-xs text-muted-foreground">
-                +24 from last month
-              </p>
+              <div className="text-2xl font-bold">{totalClaims}</div>
+              
             </CardContent>
           </Card>
 
@@ -144,10 +155,8 @@ function Homepage() {
               <CheckCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">1,072</div>
-              <p className="text-xs text-muted-foreground">
-                83.5% approval rate
-              </p>
+              <div className="text-2xl font-bold">0</div>
+              
             </CardContent>
           </Card>
 
@@ -157,10 +166,7 @@ function Homepage() {
               <AlertTriangle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">212</div>
-              <p className="text-xs text-muted-foreground">
-                16.5% flagged rate
-              </p>
+              <div className="text-2xl font-bold">0</div>
             </CardContent>
           </Card>
 
@@ -171,9 +177,6 @@ function Homepage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">$2.4M</div>
-              <p className="text-xs text-muted-foreground">
-                +12% from last month
-              </p>
             </CardContent>
           </Card>
         </div>

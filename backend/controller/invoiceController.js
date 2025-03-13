@@ -59,4 +59,19 @@ const getRecentInvoices = async (req, res) => {
     }
 }
 
-module.exports  = {getAllInvoices , storeInvoices, getRecentInvoices}
+const getClaimsCount = async (req, res) => {
+    try {
+        const count = await Invoice.countDocuments({ uId: req.params.uId });
+        res.status(200).json({
+            success: true,
+            totalClaims: count
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            error: error.message
+        });
+    }
+}
+
+module.exports  = {getAllInvoices , storeInvoices, getRecentInvoices, getClaimsCount}
