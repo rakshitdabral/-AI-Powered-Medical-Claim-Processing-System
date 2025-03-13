@@ -11,7 +11,7 @@ export const Signup = () => {
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Create an account</h1>
-          <p className="text-gray-600">Join Acme Inc today</p>
+          <p className="text-gray-600">Join Medi Claim today</p>
         </div>
 
         <form onSubmit={(e) => handleSignUp(e, setError)} className="space-y-4">

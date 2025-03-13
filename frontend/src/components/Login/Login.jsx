@@ -11,7 +11,7 @@ export const Login = () => {
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Welcome back</h1>
-          <p className="text-gray-600">Login to your Acme Inc account</p>
+          <p className="text-gray-600">Login to your Medi Claim account</p>
         </div>
 
         <form onSubmit={(e) => handleSubmit(e, setError)} className="space-y-4">

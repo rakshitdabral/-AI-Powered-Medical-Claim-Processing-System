@@ -34,6 +34,7 @@ export async function analyzeImage(imageFile) {
                                   "- Date of Service\n\n" +
                                   "Return only the raw JSON object with these exact keys: patientName, diagnosis, billAmount, claimAmount, serviceDate" +
                                   "IMPORTANT : DONOT RETURN MARKDOWN FORMAT"+
+                                  "IMPORTANT: MAKE SURE YOU ALWAYS CHANGE DATE INTO DATE FORMAT like DD/MM/YYYY"+
                                   "IMPORTANT : MAKE SURE JSON FORMAT MATCHES MY DEMO {patientName,diagnosis,serviceDate,billAmount}"+
                                   "IMPORTANT : IF YOU ARE NOT ABLE TO EXTRACT ANY INFO MARK ITS VALUE AS N/A example: serviceDate : N/A"
                         
@@ -69,6 +70,7 @@ export async function analyzeImage(imageFile) {
                 throw new Error('Failed to store data')
             }
             const result = await storeResponse.json()
+            window.location.reload()
             return result.data
         } catch (error) {
             console.error("Failed to parse JSON response:", response.choices[0].message.content);

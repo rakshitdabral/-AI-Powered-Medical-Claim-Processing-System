@@ -2,7 +2,7 @@ const Invoice = require('../models/invoice')
 
 const getAllInvoices = async (req,res) =>{
   try {
-    const records = await Invoice.find();
+    const records = await Invoice.find({ uId: req.params.uId }).sort({ createdAt: -1 })
     res.status(200).json({
         success: true,
         count: records.length,

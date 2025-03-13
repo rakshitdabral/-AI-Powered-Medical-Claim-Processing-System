@@ -16,7 +16,7 @@ const invoiceSchema = new mongoose.Schema({
     type : String,
   },
   serviceDate : {
-    type : Date
+    type : mongoose.Schema.Types.Mixed
   },
   createdAt : {
     type : Date,

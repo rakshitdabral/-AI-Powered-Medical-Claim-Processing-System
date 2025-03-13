@@ -79,7 +79,7 @@ function Homepage() {
               </Button>
             </li>
             <li>
-              <Button variant="ghost" className="w-full justify-start" size="lg">
+              <Button onClick={()=>{navigate('/claim')}} variant="ghost" className="w-full justify-start cursor-pointer" size="lg">
                 <FileText className="mr-2 h-4 w-4" />
                 Claims
               </Button>
@@ -180,14 +180,14 @@ function Homepage() {
 
         {/* Bottom Grid */}
         <div className="grid grid-cols-3 gap-4 mt-6">
-          <Card className="col-span-2 overflow-x-hidden overflow-y-scroll">
+          <Card className="col-span-2 ">
             <CardHeader>
               <CardTitle>Recent Claims</CardTitle>
               <p className="text-sm text-muted-foreground">
                 Last 5 processed claims in the system
               </p>
             </CardHeader>
-            <CardContent className="">
+            <CardContent className=" max-h-[250px] overflow-y-auto">
               <div className="space-y-4 ">
                 {recentClaims.map((claim) => (
                   <div key={claim._id} className="flex items-center justify-between p-4 border rounded-lg">
