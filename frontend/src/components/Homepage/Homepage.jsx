@@ -39,11 +39,13 @@ function Homepage() {
   const navigate = useNavigate()
 
   const handleFileUpload =async (event) => {
+    event.preventDefault(); 
     const file = event.target.files[0];
     if (file) {
       try{
         const analysis = await analyzeImage(file);
         console.log("File Uploaded Successfully" , analysis)
+        
       }catch (error){
         console.error("Error uploading file" , error)
       }
